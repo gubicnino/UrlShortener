@@ -26,8 +26,9 @@ public class UrlController {
 
     @PostMapping("/api/urls")
     @ResponseStatus(HttpStatus.CREATED)
-    public UrlResponse create(@Valid @RequestBody CreateUrlRequest request) {
-        return urlService.create(request);
+    public String create(@Valid @RequestBody CreateUrlRequest request) {
+        UrlResponse urlResponse = urlService.create(request);
+        return urlResponse.getShortCode();
     }
 
     @GetMapping("/api/urls/{shortCode}")

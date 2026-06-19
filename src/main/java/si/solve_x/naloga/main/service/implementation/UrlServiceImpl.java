@@ -1,7 +1,9 @@
 package si.solve_x.naloga.main.service.implementation;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import si.solve_x.naloga.main.dto.CreateUrlRequest;
 import si.solve_x.naloga.main.dto.UrlResponse;
 import si.solve_x.naloga.main.repository.UrlRepository;
@@ -16,7 +18,6 @@ public class UrlServiceImpl implements UrlService {
     private static String encodeBase62(long number) {
         final String characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder sb = new StringBuilder();
-        if (number == 0) {return "";}
         while(number > 0) {
             sb.append(characters.charAt((int) (number % characters.length())));
             number /= characters.length();
@@ -43,11 +44,23 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public UrlResponse getByShortCode(String shortCode) {
-        return null;
+        Url url = urlRepository.findByShortCode(shortCode).orElse(null);
+        return UrlResponse.builder()
+                .id(url.getId())
+                .originalUrl(url.getOriginalUrl())
+                .shortCode(url.getShortCode())
+                .shortUrl("http://localhost:8080/" + url.getShortCode())
+                .createdAt(url.getCreatedAt())
+                .clickCount(url.getClickCount())
+                .build();
     }
 
     @Override
     public String resolveAndTrack(String shortCode) {
-        return "";
+        Url url = urlRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Short code not found"));
+        url.setClickCount(url.getClickCount() + 1);
+        urlRepository.save(url);
+        return url.getOriginalUrl();
     }
 }
