@@ -27,9 +27,8 @@ public class UrlController {
 
     @PostMapping("/api/shorten")
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@Valid @RequestBody CreateUrlRequest request) {
-        UrlResponse urlResponse = urlService.create(request);
-        return urlResponse.getCode();
+    public UrlResponse create(@Valid @RequestBody CreateUrlRequest request) {
+        return urlService.create(request);
     }
 
     @GetMapping("/api/stats/{code}")

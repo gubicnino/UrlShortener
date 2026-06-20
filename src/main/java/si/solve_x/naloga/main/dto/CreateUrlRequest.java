@@ -9,6 +9,7 @@ import java.time.Instant;
 @Data
 public class CreateUrlRequest {
 
-    @NotBlank
+    @NotBlank(message = "URL must not be blank")
+    @Pattern(regexp = "^https?://.*", message = "URL must start with http:// or https://")
     private String url;
 }

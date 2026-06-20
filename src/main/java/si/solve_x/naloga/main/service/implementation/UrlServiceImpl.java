@@ -34,12 +34,8 @@ public class UrlServiceImpl implements UrlService {
         url.setCode(code);
         urlRepository.save(url);
         return UrlResponse.builder()
-                .id(url.getId())
-                .originalUrl(url.getOriginalUrl())
                 .code(url.getCode())
                 .shortUrl("http://localhost:8080/" + url.getCode())
-                .createdAt(url.getCreatedAt())
-                .clickCount(url.getClickCount())
                 .build();
     }
 
