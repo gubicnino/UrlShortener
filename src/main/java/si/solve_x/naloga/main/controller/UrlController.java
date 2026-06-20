@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import si.solve_x.naloga.main.dto.CreateUrlRequest;
+import si.solve_x.naloga.main.dto.ShortCodeDataResponse;
 import si.solve_x.naloga.main.dto.UrlResponse;
 import si.solve_x.naloga.main.service.UrlService;
 
@@ -24,21 +25,21 @@ public class UrlController {
 
     private final UrlService urlService;
 
-    @PostMapping("/api/urls")
+    @PostMapping("/api/shorten")
     @ResponseStatus(HttpStatus.CREATED)
     public String create(@Valid @RequestBody CreateUrlRequest request) {
         UrlResponse urlResponse = urlService.create(request);
-        return urlResponse.getShortCode();
+        return urlResponse.getCode();
     }
 
-    @GetMapping("/api/urls/{shortCode}")
-    public UrlResponse getByShortCode(@PathVariable String shortCode) {
-        return urlService.getByShortCode(shortCode);
+    @GetMapping("/api/stats/{code}")
+    public ShortCodeDataResponse getShortCodeData(@PathVariable String code) {
+        return urlService.getShortCodeData(code);
     }
 
-    @GetMapping("/{shortCode}")
-    public ResponseEntity<Void> redirect(@PathVariable String shortCode) {
-        String originalUrl = urlService.resolveAndTrack(shortCode);
+    @GetMapping("/{code}")
+    public ResponseEntity<Void> redirect(@PathVariable String code) {
+        String originalUrl = urlService.resolveAndTrack(code);
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(originalUrl))
                 .build();

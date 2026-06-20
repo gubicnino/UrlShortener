@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import si.solve_x.naloga.main.dto.CreateUrlRequest;
+import si.solve_x.naloga.main.dto.ShortCodeDataResponse;
 import si.solve_x.naloga.main.dto.UrlResponse;
 import si.solve_x.naloga.main.repository.UrlRepository;
 import si.solve_x.naloga.main.service.UrlService;
@@ -27,37 +28,33 @@ public class UrlServiceImpl implements UrlService {
     @Override
     public UrlResponse create(CreateUrlRequest request) {
         Url url = new Url();
-        url.setOriginalUrl(request.getOriginalUrl());
+        url.setOriginalUrl(request.getUrl());
         urlRepository.save(url);
-        String shortCode = encodeBase62(url.getId());
-        url.setShortCode(shortCode);
+        String code = encodeBase62(url.getId());
+        url.setCode(code);
         urlRepository.save(url);
         return UrlResponse.builder()
                 .id(url.getId())
                 .originalUrl(url.getOriginalUrl())
-                .shortCode(url.getShortCode())
-                .shortUrl("http://localhost:8080/" + url.getShortCode())
+                .code(url.getCode())
+                .shortUrl("http://localhost:8080/" + url.getCode())
                 .createdAt(url.getCreatedAt())
                 .clickCount(url.getClickCount())
                 .build();
     }
 
     @Override
-    public UrlResponse getByShortCode(String shortCode) {
-        Url url = urlRepository.findByShortCode(shortCode).orElse(null);
-        return UrlResponse.builder()
-                .id(url.getId())
-                .originalUrl(url.getOriginalUrl())
-                .shortCode(url.getShortCode())
-                .shortUrl("http://localhost:8080/" + url.getShortCode())
+    public ShortCodeDataResponse getShortCodeData(String code) {
+        Url url = urlRepository.findByCode(code).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Short code not found"));
+        return ShortCodeDataResponse.builder()
                 .createdAt(url.getCreatedAt())
                 .clickCount(url.getClickCount())
                 .build();
     }
 
     @Override
-    public String resolveAndTrack(String shortCode) {
-        Url url = urlRepository.findByShortCode(shortCode)
+    public String resolveAndTrack(String code) {
+        Url url = urlRepository.findByCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Short code not found"));
         url.setClickCount(url.getClickCount() + 1);
         urlRepository.save(url);

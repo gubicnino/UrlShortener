@@ -27,7 +27,7 @@ public class Url {
     private String originalUrl;
 
     @Column(unique = true,  length = 10)
-    private String shortCode;
+    private String code;
 
     @Column(updatable = false)
     private Instant createdAt;

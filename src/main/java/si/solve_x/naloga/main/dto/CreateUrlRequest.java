@@ -10,5 +10,5 @@ import java.time.Instant;
 public class CreateUrlRequest {
 
     @NotBlank
-    private String originalUrl;
+    private String url;
 }

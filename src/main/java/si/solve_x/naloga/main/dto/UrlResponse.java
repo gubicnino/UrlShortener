@@ -10,7 +10,7 @@ import java.time.Instant;
 public class UrlResponse {
     Long id;
     String originalUrl;
-    String shortCode;
+    String code;
     String shortUrl;
     Instant createdAt;
     Instant expiresAt;
