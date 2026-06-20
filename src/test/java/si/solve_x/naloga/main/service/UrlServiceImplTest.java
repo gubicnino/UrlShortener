@@ -5,12 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 import si.solve_x.naloga.main.dto.CreateUrlRequest;
 import si.solve_x.naloga.main.dto.UrlResponse;
 import si.solve_x.naloga.main.repository.UrlRepository;
 import si.solve_x.naloga.main.service.implementation.UrlServiceImpl;
-import si.solve_x.naloga.main.vao.Url;
+import si.solve_x.naloga.main.entity.Url;
 
 import java.time.Instant;
 import java.util.Optional;

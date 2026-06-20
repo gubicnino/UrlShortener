@@ -1,6 +1,7 @@
 package si.solve_x.naloga.main.service.implementation;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -9,12 +10,15 @@ import si.solve_x.naloga.main.dto.ShortCodeDataResponse;
 import si.solve_x.naloga.main.dto.UrlResponse;
 import si.solve_x.naloga.main.repository.UrlRepository;
 import si.solve_x.naloga.main.service.UrlService;
-import si.solve_x.naloga.main.vao.Url;
+import si.solve_x.naloga.main.entity.Url;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UrlServiceImpl implements UrlService {
     private final UrlRepository urlRepository;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     private static String encodeBase62(long number) {
         final String characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -35,7 +39,7 @@ public class UrlServiceImpl implements UrlService {
         urlRepository.save(url);
         return UrlResponse.builder()
                 .code(url.getCode())
-                .shortUrl("http://localhost:8080/" + url.getCode())
+                .shortUrl(baseUrl + "/" + url.getCode())
                 .build();
     }
 

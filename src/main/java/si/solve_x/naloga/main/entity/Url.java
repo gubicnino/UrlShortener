@@ -1,4 +1,4 @@
-package si.solve_x.naloga.main.vao;
+package si.solve_x.naloga.main.entity;
 
 import java.time.Instant;
 
