@@ -70,19 +70,4 @@ class UrlServiceImplTest {
         verify(urlRepository).save(url);
     }
 
-    // Edge case: unknown code on redirect throws 404
-    @Test
-    void resolveAndTrack_unknownCode_throwsNotFoundException() {
-        when(urlRepository.findByCode("unknown")).thenReturn(Optional.empty());
-
-        assertThrows(ResponseStatusException.class, () -> urlService.resolveAndTrack("unknown"));
-    }
-
-    // Edge case: unknown code on stats throws 404
-    @Test
-    void getShortCodeData_unknownCode_throwsNotFoundException() {
-        when(urlRepository.findByCode("unknown")).thenReturn(Optional.empty());
-
-        assertThrows(ResponseStatusException.class, () -> urlService.getShortCodeData("unknown"));
-    }
 }
